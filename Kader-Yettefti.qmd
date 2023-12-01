@@ -245,3 +245,19 @@ stars <- vroom(
 str(stars)
 ```
 
+### Question 11
+
+```{r}
+# Join the planets with stars on Star_idx and check for missing matches
+planets_without_stars <- planets %>%
+  anti_join(stars, by = "Star_idx") %>%
+  select(p_name)
+
+print(planets_without_stars)
+```
+```{r}
+# Count the number of stars that are not in the planets dataframe
+num_stars_without_planets <- nrow(stars) - length(unique(planets$Star_idx[planets$Star_idx %in% stars$Star_idx]))
+
+print(paste("Number of stars with no associated planet:", num_stars_without_planets))
+```
