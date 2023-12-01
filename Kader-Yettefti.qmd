@@ -88,9 +88,11 @@ num_obs_with_missing <- sum(apply(planets, 1, function(x) any(is.na(x))))
 
 # Create a data frame for the table
 table_data <- data.frame(
-  Metric = c("Number of Observations", "Number of Variables", 
-             paste("Missing Values in '", names(missing_values), "'", sep = ""),
-             "Observations with at Least One Missing Value"),
+  Metric = c(
+    "Number of Observations", "Number of Variables",
+    paste("Missing Values in '", names(missing_values), "'", sep = ""),
+    "Observations with at Least One Missing Value"
+  ),
   Value = c(num_observations, num_variables, missing_values, num_obs_with_missing)
 )
 
@@ -119,16 +121,16 @@ ggplot(planets_complete, aes(x = DENSITY, y = `Radius (Earth)`)) +
 ```{r}
 # Function to get the planet with max and min value for a given variable
 get_extremes <- function(df, variable) {
-  max_row <- df %>% 
-    filter(.[[variable]] == max(.[[variable]], na.rm = TRUE)) %>% 
-    select(p_name, Value = !!variable) %>% 
+  max_row <- df %>%
+    filter(.[[variable]] == max(.[[variable]], na.rm = TRUE)) %>%
+    select(p_name, Value = !!variable) %>%
     mutate(Variable = variable, Extremity = "Max")
-  
-  min_row <- df %>% 
-    filter(.[[variable]] == min(.[[variable]], na.rm = TRUE)) %>% 
-    select(p_name, Value = !!variable) %>% 
+
+  min_row <- df %>%
+    filter(.[[variable]] == min(.[[variable]], na.rm = TRUE)) %>%
+    select(p_name, Value = !!variable) %>%
     mutate(Variable = variable, Extremity = "Min")
-  
+
   rbind(max_row, min_row)
 }
 
@@ -147,3 +149,21 @@ kable(extreme_planets, format = "markdown", col.names = c("Planet Name", "Value"
 ## Improved data representation
 
 ### Question 7
+
+```{r}
+# Split the TERRAIN TYPE
+terrain_types <- planets %>%
+  select(planet_code, `TERRAIN TYPE`) %>%
+  separate_rows(`TERRAIN TYPE`, sep = ",") %>%
+  mutate(`TERRAIN TYPE` = trimws(`TERRAIN TYPE`))
+
+# Split the Type_climate
+climate_types <- planets %>%
+  select(planet_code, Type_climate) %>%
+  separate_rows(Type_climate, sep = ",") %>%
+  mutate(Type_climate = trimws(Type_climate))
+
+head(terrain_types)
+head(climate_types)
+```
+
