@@ -284,3 +284,16 @@ ggplot(stars, aes(x = `Temperature Class`)) +
   )
 ```
 
+### Question 14
+
+```{r}
+ggplot(stars, aes(x = `Temperature Class`, fill = Magnitude)) +
+  geom_bar(position = "dodge") +
+  labs(
+    title = "Distribution of Stars by Temperature Class and Magnitude",
+    x = "Temperature Class",
+    y = "Count",
+    fill = "Magnitude"
+  ) 
+```
+
