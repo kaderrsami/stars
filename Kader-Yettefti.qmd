@@ -1,0 +1,16 @@
+---
+title: "Kader-Yettefti Stars subject 11"
+author: "Sami Kader-Yettefti"
+format: html
+---
+
+```{r}
+here::i_am("stars.Rproj")
+library(here)
+library(vroom)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+Link to the [GitHub repository](https://github.com/kaderrsami/stars).
