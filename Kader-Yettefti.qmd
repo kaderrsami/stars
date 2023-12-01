@@ -218,3 +218,30 @@ ggplot(climate_types, aes(x = Type_climate, y = mass, fill = Type_climate)) +
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+## 
+
+### Question 10
+
+```{r}
+# Load the star data
+stars <- vroom(
+  here("data", "Liststars.csv"),
+  na = "na",
+  delim = ":",
+  col_types = cols(
+    s_name = col_character(),
+    `Distance From The Sun` = col_double(),
+    `TYPE OF STAR` = col_character(),
+    Star_idx = col_double(),
+    `star temperature` = col_double(),
+    Radius = col_double(),
+    `relative mass` = col_double(),
+    `STAR LUMINOSITY` = col_double()
+  ),
+  locale = locale(decimal_mark = ",")
+)
+
+# Verify the content
+str(stars)
+```
+
