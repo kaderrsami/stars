@@ -271,3 +271,16 @@ stars <- stars %>%
 
 head(stars)
 ```
+
+### Question 13
+
+```{r}
+ggplot(stars, aes(x = `Temperature Class`)) +
+  geom_bar() +
+  labs(
+    title = "Distribution of Stars by Temperature Class",
+    x = "Temperature Class",
+    y = "Count"
+  )
+```
+
