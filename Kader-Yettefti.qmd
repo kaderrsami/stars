@@ -370,3 +370,28 @@ ggplot(frequency_of_planets_per_star, aes(x = number_of_planets, y = number_of_s
     y = "Number of Stars")
 ```
 
+### Question 18
+
+```{r}
+# Joining the planets with stars and filtering out NA in Temperature Class
+planets_with_star_class <- planets %>%
+  left_join(stars, by = "Star_idx") %>%
+  filter(!is.na(`Temperature Class`))  # Exclude rows where Temperature Class is NA
+
+# Count the number of planets per star within each temperature class
+planet_count_per_star_class <- planets_with_star_class %>%
+  group_by(`Temperature Class`, Star_idx) %>%
+  summarise(number_of_planets = n(), .groups = 'drop') %>%
+  filter(!is.na(number_of_planets))  # Exclude rows where number_of_planets is NA
+
+# Create a faceted bar chart
+ggplot(planet_count_per_star_class, aes(x = number_of_planets)) +
+  geom_bar() +
+  facet_wrap(~ `Temperature Class`, scales = "free_x") +
+  labs(
+    title = "Distribution of the Number of Planets Per Star Conditioned by Star Class",
+    x = "Number of Planets",
+    y = "Count"
+  )
+```
+
