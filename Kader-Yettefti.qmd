@@ -344,3 +344,29 @@ stars_extended <- stars_extended %>%
   )
 ```
 
+## Combined analysis
+
+### Question 17
+
+```{r}
+# Count the number of planets for each star
+planets_per_star <- planets %>%
+  group_by(Star_idx) %>%
+  summarise(number_of_planets = n()) %>%
+  ungroup()
+
+# Count the frequency of each planet count
+frequency_of_planets_per_star <- planets_per_star %>%
+  group_by(number_of_planets) %>%
+  summarise(number_of_stars = n()) %>%
+  ungroup()
+
+# Create a bar chart
+ggplot(frequency_of_planets_per_star, aes(x = number_of_planets, y = number_of_stars)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Distribution of the Number of Planets Per Star",
+    x = "Number of Planets",
+    y = "Number of Stars")
+```
+
