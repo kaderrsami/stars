@@ -12,6 +12,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(knitr)
+library(stringr)
 theme_bw()
 ```
 
@@ -295,5 +296,51 @@ ggplot(stars, aes(x = `Temperature Class`, fill = Magnitude)) +
     y = "Count",
     fill = "Magnitude"
   ) 
+```
+
+### Question 15
+
+```{r}
+star_types <- vroom(here("data", "star_types.csv"))
+yerkes_classes <- vroom(here("data", "Yerkes_luminosity_classes.csv"))
+```
+```{r}
+# Function to parse ranges (e.g., "0.45 - 0.8 M☉") and extract min and max values
+parse_range <- function(range_str) {
+  # Replace special characters and split the string
+  parts <- str_replace_all(range_str, "[^0-9.-]", "") %>%
+           str_split(" - ") %>%
+           unlist()
+  
+  # Convert to numeric and return
+  as.numeric(parts)
+}
+
+colnames(star_types)[1] ="Temperature Class"
+colnames(yerkes_classes)[1] ="Luminosity Class"
+
+# Add parsed range columns to star_types
+star_types <- star_types %>%
+  mutate(
+    Temp_Min = parse_range(`Effective temperature`)[1],
+    Temp_Max = parse_range(`Effective temperature`)[2],
+    Mass_Min = parse_range(`Main-sequence mass`)[1],
+    Mass_Max = parse_range(`Main-sequence mass`)[2],
+    Radius_Min = parse_range(`Main-sequence radius`)[1],
+    Radius_Max = parse_range(`Main-sequence radius`)[2]
+  )
+
+# Join the stars data with star_types and yerkes_classes for comparison
+stars_extended <- stars %>%
+  left_join(star_types, by = "Temperature Class") %>%
+  left_join(yerkes_classes, by = "Luminosity Class")
+
+# Verify compatibility
+stars_extended <- stars_extended %>%
+  mutate(
+    is_temperature_compatible = `star temperature` >= Temp_Min & `star temperature` <= Temp_Max,
+    is_mass_compatible = `relative mass` >= Mass_Min & `relative mass` <= Mass_Max,
+    is_radius_compatible = Radius >= Radius_Min & Radius <= Radius_Max
+  )
 ```
 
