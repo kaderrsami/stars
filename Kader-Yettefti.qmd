@@ -12,6 +12,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(knitr)
+theme_bw()
 ```
 
 Link to the [GitHub repository](https://github.com/kaderrsami/stars).
@@ -95,5 +96,21 @@ table_data <- data.frame(
 
 # Create the table using kable
 kable(table_data, format = "markdown", col.names = c("Metric", "Value"))
+```
+### Question 5
+
+```{r}
+# Filter out rows with missing values in Density or Radius
+planets_complete <- planets %>%
+  filter(!is.na(DENSITY) & !is.na(`Radius (Earth)`))
+
+# Plotting the data
+ggplot(planets_complete, aes(x = DENSITY, y = `Radius (Earth)`)) +
+  geom_point() +
+  labs(
+    title = "Planet Radius as a Function of Density",
+    x = "Density (relative to Earth)",
+    y = "Radius (relative to Earth)"
+  )
 ```
 
