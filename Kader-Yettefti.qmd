@@ -3,7 +3,7 @@ title: "Kader-Yettefti Stars subject 11"
 author: "Sami Kader-Yettefti"
 format: html
 ---
-
+## Main data set import
 ```{r setup, include= FALSE}
 here::i_am("stars.Rproj")
 library(here)
@@ -114,3 +114,36 @@ ggplot(planets_complete, aes(x = DENSITY, y = `Radius (Earth)`)) +
   )
 ```
 
+### Question 6
+
+```{r}
+# Function to get the planet with max and min value for a given variable
+get_extremes <- function(df, variable) {
+  max_row <- df %>% 
+    filter(.[[variable]] == max(.[[variable]], na.rm = TRUE)) %>% 
+    select(p_name, Value = !!variable) %>% 
+    mutate(Variable = variable, Extremity = "Max")
+  
+  min_row <- df %>% 
+    filter(.[[variable]] == min(.[[variable]], na.rm = TRUE)) %>% 
+    select(p_name, Value = !!variable) %>% 
+    mutate(Variable = variable, Extremity = "Min")
+  
+  rbind(max_row, min_row)
+}
+
+# Apply the function to each numerical variable
+extremes_mass <- get_extremes(planets, "mass")
+extremes_density <- get_extremes(planets, "DENSITY")
+extremes_radius <- get_extremes(planets, "Radius (Earth)")
+
+# Combine the results into a single table
+extreme_planets <- rbind(extremes_mass, extremes_density, extremes_radius)
+
+# Create the table using kable
+kable(extreme_planets, format = "markdown", col.names = c("Planet Name", "Value", "Variable", "Extremity"))
+```
+
+## Improved data representation
+
+### Question 7
