@@ -11,6 +11,7 @@ library(vroom)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(knitr)
 ```
 
 Link to the [GitHub repository](https://github.com/kaderrsami/stars).
@@ -33,7 +34,8 @@ planets <- vroom(
     planet_code = col_double(),
     Star_idx = col_double()
   ),
-  locale = locale(decimal_mark = ",") )
+  locale = locale(decimal_mark = ",")
+)
 
 # Check the structure of the loaded data
 str(planets)
@@ -70,3 +72,28 @@ if (all(are_numerical)) {
   message("Some numerical variables are not recognized correctly.")
 }
 ```
+### Question 4
+
+```{r}
+# Number of observations (planets) and variables
+num_observations <- nrow(planets)
+num_variables <- ncol(planets)
+
+# Number of missing values for each variable
+missing_values <- sapply(planets, function(x) sum(is.na(x)))
+
+# Number of observations with at least one missing value
+num_obs_with_missing <- sum(apply(planets, 1, function(x) any(is.na(x))))
+
+# Create a data frame for the table
+table_data <- data.frame(
+  Metric = c("Number of Observations", "Number of Variables", 
+             paste("Missing Values in '", names(missing_values), "'", sep = ""),
+             "Observations with at Least One Missing Value"),
+  Value = c(num_observations, num_variables, missing_values, num_obs_with_missing)
+)
+
+# Create the table using kable
+kable(table_data, format = "markdown", col.names = c("Metric", "Value"))
+```
+
