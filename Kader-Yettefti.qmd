@@ -167,3 +167,35 @@ head(terrain_types)
 head(climate_types)
 ```
 
+### Question 8
+
+```{r}
+# Number of climates
+climate_count <- climate_types %>%
+  group_by(planet_code) %>%
+  summarise(number_of_climates = n_distinct(Type_climate))
+
+# Number of terrain types
+terrain_count <- terrain_types %>%
+  group_by(planet_code) %>%
+  summarise(number_of_terrains = n_distinct(`TERRAIN TYPE`))
+
+# Plot climates
+ggplot(climate_count, aes(x = number_of_climates)) +
+  geom_bar() +
+  labs(
+    title = "Distribution of Number of Different Climates Per Planet",
+    x = "Number of Different Climates",
+    y = "Number of Planets"
+  )
+
+# Plot terrain
+ggplot(terrain_count, aes(x = number_of_terrains)) +
+  geom_bar() +
+  labs(
+    title = "Distribution of Number of Different Terrains Per Planet",
+    x = "Number of Different Terrains",
+    y = "Number of Planets"
+  )
+```
+
