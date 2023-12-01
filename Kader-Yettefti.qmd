@@ -261,3 +261,13 @@ num_stars_without_planets <- nrow(stars) - length(unique(planets$Star_idx[planet
 
 print(paste("Number of stars with no associated planet:", num_stars_without_planets))
 ```
+
+### Question 12
+
+```{r}
+# Split the TYPE OF STAR into three components
+stars <- stars %>%
+  separate(`TYPE OF STAR`, into = c("Temperature Class", "Magnitude", "Luminosity Class"), sep = ":")
+
+head(stars)
+```
