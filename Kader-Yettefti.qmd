@@ -73,6 +73,7 @@ if (all(are_numerical)) {
   message("Some numerical variables are not recognized correctly.")
 }
 ```
+
 ### Question 4
 
 ```{r}
@@ -99,6 +100,7 @@ table_data <- data.frame(
 # Create the table using kable
 kable(table_data, format = "markdown", col.names = c("Metric", "Value"))
 ```
+
 ### Question 5
 
 ```{r}
@@ -159,7 +161,7 @@ terrain_types <- planets %>%
 
 # Split the Type_climate
 climate_types <- planets %>%
-  select(planet_code, Type_climate) %>%
+  select(planet_code, Type_climate, mass) %>% # added mass for question 9
   separate_rows(Type_climate, sep = ",") %>%
   mutate(Type_climate = trimws(Type_climate))
 
@@ -199,3 +201,20 @@ ggplot(terrain_count, aes(x = number_of_terrains)) +
   )
 ```
 
+### Question 9
+
+```{r}
+# Filter the NAs in mass
+climate_types <- climate_types %>%
+  filter(!is.na(mass))
+
+# Graphical representation of the mass distribution conditioned by climates
+ggplot(climate_types, aes(x = Type_climate, y = mass, fill = Type_climate)) +
+  geom_boxplot() +
+  labs(
+    title = "Distribution of Planet Mass Conditioned by Climates",
+    x = "Climate Type",
+    y = "Mass (relative to Earth)"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
