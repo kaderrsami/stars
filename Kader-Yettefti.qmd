@@ -4,7 +4,7 @@ author: "Sami Kader-Yettefti"
 format: html
 ---
 
-```{r}
+```{r setup, include= FALSE}
 here::i_am("stars.Rproj")
 library(here)
 library(vroom)
@@ -14,3 +14,59 @@ library(ggplot2)
 ```
 
 Link to the [GitHub repository](https://github.com/kaderrsami/stars).
+
+### Question 3
+
+```{r}
+# Changing the loading process to handle missing values and decimal mark
+planets <- vroom(
+  here("data", "List%planets.csv"),
+  na = "na",
+  delim = ":",
+  col_types = cols(
+    p_name = col_character(),
+    mass = col_double(),
+    DENSITY = col_double(),
+    `Radius (Earth)` = col_double(),
+    `TERRAIN TYPE` = col_character(),
+    Type_climate = col_character(),
+    planet_code = col_double(),
+    Star_idx = col_double()
+  ),
+  locale = locale(decimal_mark = ",") )
+
+# Check the structure of the loaded data
+str(planets)
+```
+
+```{r}
+# Expected values
+expected_row_count <- 1191
+expected_column_count <- 8
+
+# Check the number of rows and columns
+actual_row_count <- nrow(planets)
+actual_column_count <- ncol(planets)
+
+# Check if numerical variables are recognized correctly
+numerical_variables <- c("mass", "Radius (Earth)", "DENSITY", "planet_code", "Star_idx")
+are_numerical <- sapply(planets[numerical_variables], is.numeric)
+
+# Conditional checks and messages
+if (actual_row_count == expected_row_count && actual_column_count == expected_column_count) {
+  message("Data loaded successfully w/ the correct number of rows and columns.")
+} else {
+  message(
+    "Data loading issue: Expected rows: ", expected_row_count,
+    ", Actual rows: ", actual_row_count,
+    "; Expected columns: ", expected_column_count,
+    ", Actual columns: ", actual_column_count
+  )
+}
+
+if (all(are_numerical)) {
+  message("All numerical variables are correctly recognized as numerical.")
+} else {
+  message("Some numerical variables are not recognized correctly.")
+}
+```
